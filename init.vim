@@ -15,7 +15,8 @@ Plugin 'iamcco/markdown-preview.nvim'
 
 Plugin 'vim-airline/vim-airline'
 
-"
+Plugin 'Valloric/YouCompleteMe', { 'do': './install.sh --clang-completer' }
+
 Plugin 'tpope/vim-fugitive'
 
 " plugin from http://vim-scripts.org/vim/scripts.html
