@@ -1,6 +1,6 @@
 set nocompatible              " be iMproved, required
-filetype off                  " required
-set number
+set termencoding=utf-8 "Кодировка терминала
+filetype on                  " required
 
 " set the runtime path to include Vundle and initialize
 set rtp+=~/.vim/bundle/Vundle.vim
@@ -11,19 +11,24 @@ call vundle#begin()
 " let Vundle manage Vundle, required
 Plugin 'VundleVim/Vundle.vim'
 
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-" plugin on GitHub repo
+Plugin 'iamcco/markdown-preview.nvim'
+
+Plugin 'vim-airline/vim-airline'
+
+"
 Plugin 'tpope/vim-fugitive'
+
 " plugin from http://vim-scripts.org/vim/scripts.html
 " Plugin 'L9'
 " Git plugin not hosted on GitHub
 Plugin 'git://git.wincent.com/command-t.git'
+
 " git repos on your local machine (i.e. when working on your own plugin)
 " Plugin 'file:///home/gmarik/path/to/plugin'
 " The sparkup vim script is in a subdirectory of this repo called vim.
 " Pass the path to set the runtimepath properly.
 Plugin 'rstacruz/sparkup', {'rtp': 'vim/'}
+
 " Install L9 and avoid a Naming conflict if you've already installed a
 " different version somewhere else.
 " Plugin 'ascenator/L9', {'name': 'newL9'}
@@ -47,34 +52,36 @@ filetype plugin indent on    " required
 " see :h vundle for more details or wiki for FAQ
 " Put your non-Plugin stuff after this line
 
+let g:airline_powerline_fonts = 1 "Включить поддержку Powerline шрифтов
+let g:airline#extensions#keymap#enabled = 0 "Не показывать текущий маппинг
+let g:airline_section_z = ":%l/%L Col:%c" "Кастомная графа положения курсора
+let g:Powerline_symbols='unicode' "Поддержка unicode
 
 
+syntax on "Включить подсветку синтаксиса
+set wildmenu
 
 " Настройки табов для PHP, согласно рекоммендациям
-set tabstop=2 
+set tabstop=2
 set shiftwidth=2
 set smarttab
 set expandtab "Ставим табы пробелами
-set softtabstop=2 "2 пробела в табе
+set softtabstop=0
 " Автоотступ
 set autoindent
 " Подсвечиваем все что можно подсвечивать
-let python_highlight_all = 1
+let php_highlight_all = 1
 " Включаем 256 цветов в терминале, мы ведь работаем из иксов?
 " Нужно во многих терминалах, например в gnome-terminal
 set t_Co=256
 
-" Перед сохранением вырезаем пробелы на концах (только в .py файлах)
-autocmd BufWritePre *.php normal m`:%s/\s\+$//e ``
+" Перед сохранением вырезаем пробелы на концах (только в .php файлах)
+autocmd BufWritePre * :%s/\s\+$//e
 " В .py файлах включаем умные отступы после ключевых слов
 
-syntax on "Включить подсветку синтаксиса
 
-" set nu "Включаем нумерацию строк
 set mousehide "Спрятать курсор мыши когда набираем текст
-set mouse=a "Включить поддержку мыши
-set termencoding=utf-8 "Кодировка терминала
-set novisualbell "Не мигать 
+set novisualbell "Не мигать
 set t_vb= "Не пищать! (Опции 'не портить текст', к сожалению, нету)
 " Удобное поведение backspace
 set backspace=indent,eol,start whichwrap+=<,>,[,]
@@ -82,8 +89,16 @@ set backspace=indent,eol,start whichwrap+=<,>,[,]
 set showtabline=1
 
 " Переносим на другую строчку, разрываем строки
-set wrap
-set linebreak
+set wrap linebreak
+set textwidth=80
+
+set cursorline
+set cursorcolumn
+
+" Выключаем звук в Vim
+set visualbell t_vb=
+
+set guifont=Monaco:h18
 
 " Вырубаем .swp и ~ (резервные) файлы
 set nobackup
@@ -93,37 +108,41 @@ set fileencodings=utf8,cp1251
 
 set clipboard=unnamed
 set ruler
+set number
+
+set background=dark
+colorscheme molokai
 
 set hidden
+
+let mapleader = ","
 nnoremap <C-N> :bnext<CR>
 nnoremap <C-P> :bprev<CR>
 
-" Выключаем звук в Vim
-set visualbell t_vb=
 
-"Переключение табов по CMD+number для MacVim
-if has("gui_macvim")
-  " Press Ctrl-Tab to switch between open tabs (like browser tabs) to 
-  " the right side. Ctrl-Shift-Tab goes the other way.
-  noremap <C-Tab> :tabnext<CR>
-  noremap <C-S-Tab> :tabprev<CR>
+nnoremap n nzz
+nnoremap N Nzz
 
-  " Switch to specific tab numbers with Command-number
-  noremap <D-1> :tabn 1<CR>
-  noremap <D-2> :tabn 2<CR>
-  noremap <D-3> :tabn 3<CR>
-  noremap <D-4> :tabn 4<CR>
-  noremap <D-5> :tabn 5<CR>
-  noremap <D-6> :tabn 6<CR>
-  noremap <D-7> :tabn 7<CR>
-  noremap <D-8> :tabn 8<CR>
-  noremap <D-9> :tabn 9<CR>
-  " Command-0 goes to the last tab
-  noremap <D-0> :tablast<CR>
-endif
+cnoreabbrev W! w!
+cnoreabbrev Q! q!
+cnoreabbrev Qall! qall!
+cnoreabbrev Wq wq
+cnoreabbrev Wa wa
+cnoreabbrev wQ wq
+cnoreabbrev WQ wq
+cnoreabbrev W w
+cnoreabbrev Q q
+cnoreabbrev Qall qall
 
-set guifont=Monaco:h18
-set background=dark
+nnoremap <c-j> <c-w>j
+nnoremap <c-k> <c-w>k
+nnoremap <c-h> <c-w>h
+nnoremap <c-l> <c-w>l
+
+noremap <c-up> <c-w>+
+noremap <c-down> <c-w>-
+noremap <c-left> <c-w>>
+noremap <c-right> <c-w><
 
 nnoremap <leader>n :NERDTreeFocus<CR>
 nnoremap <C-n> :NERDTree<CR>
@@ -131,6 +150,114 @@ nnoremap <C-t> :NERDTreeToggle<CR>
 nnoremap <C-f> :NERDTreeFind<CR>
 
 inoremap jk <esc>
-nnoremap ,<space> :nohlsearch<CR>
 
+nnoremap o o<esc>
+nnoremap O O<esc>
 
+nnoremap <space> :
+nnoremap <leader><leader> :nohlsearch<CR>
+
+set hlsearch
+set incsearch
+set ignorecase
+set smartcase
+
+" Markdown --------------------------------------------------- {{{
+
+" set to 1, nvim will open the preview window after entering the markdown buffer
+" default: 0
+let g:mkdp_auto_start = 1
+
+" set to 1, the nvim will auto close current preview window when change
+" from markdown buffer to another buffer
+" default: 1
+let g:mkdp_auto_close = 1
+
+" set to 1, the vim will refresh markdown when save the buffer or
+" leave from insert mode, default 0 is auto refresh markdown as you edit or
+" move the cursor
+" default: 0
+let g:mkdp_refresh_slow = 0
+
+" set to 1, the MarkdownPreview command can be use for all files,
+" by default it can be use in markdown file
+" default: 0
+let g:mkdp_command_for_global = 0
+
+" set to 1, preview server available to others in your network
+" by default, the server listens on localhost (127.0.0.1)
+" default: 0
+let g:mkdp_open_to_the_world = 0
+
+" use custom IP to open preview page
+" useful when you work in remote vim and preview on local browser
+" more detail see: https://github.com/iamcco/markdown-preview.nvim/pull/9
+" default empty
+let g:mkdp_open_ip = ''
+
+" specify browser to open preview page
+" default: ''
+let g:mkdp_browser = ''
+
+" set to 1, echo preview page url in command line when open preview page
+" default is 0
+let g:mkdp_echo_preview_url = 0
+
+" a custom vim function name to open preview page
+" this function will receive url as param
+" default is empty
+let g:mkdp_browserfunc = ''
+
+" options for markdown render
+" mkit: markdown-it options for render
+" katex: katex options for math
+" uml: markdown-it-plantuml options
+" maid: mermaid options
+" disable_sync_scroll: if disable sync scroll, default 0
+" sync_scroll_type: 'middle', 'top' or 'relative', default value is 'middle'
+"   middle: mean the cursor position alway show at the middle of the preview page
+"   top: mean the vim top viewport alway show at the top of the preview page
+"   relative: mean the cursor position alway show at the relative positon of the preview page
+" hide_yaml_meta: if hide yaml metadata, default is 1
+" sequence_diagrams: js-sequence-diagrams options
+" content_editable: if enable content editable for preview page, default: v:false
+" disable_filename: if disable filename header for preview page, default: 0
+let g:mkdp_preview_options = {
+    \ 'mkit': {},
+    \ 'katex': {},
+    \ 'uml': {},
+    \ 'maid': {},
+    \ 'disable_sync_scroll': 0,
+    \ 'sync_scroll_type': 'middle',
+    \ 'hide_yaml_meta': 1,
+    \ 'sequence_diagrams': {},
+    \ 'flowchart_diagrams': {},
+    \ 'content_editable': v:false,
+    \ 'disable_filename': 0
+    \ }
+
+" use a custom markdown style must be absolute path
+" like '/Users/username/markdown.css' or expand('~/markdown.css')
+let g:mkdp_markdown_css = ''
+
+" use a custom highlight style must absolute path
+" like '/Users/username/highlight.css' or expand('~/highlight.css')
+let g:mkdp_highlight_css = ''
+
+" use a custom port to start server or random for empty
+let g:mkdp_port = ''
+
+" preview page title
+" ${name} will be replace with the file name
+let g:mkdp_page_title = '「${name}」'
+
+" recognized filetypes
+" these filetypes will have MarkdownPreview... commands
+let g:mkdp_filetypes = ['markdown']
+
+" example
+nmap <C-s> <Plug>MarkdownPreview
+nmap <M-s> <Plug>MarkdownPreviewStop
+nmap <C-p> <Plug>MarkdownPreviewToggle
+
+" }}}
